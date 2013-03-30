@@ -13,6 +13,7 @@ module Berkshelf
       @downloader = downloader
       @graph = Solve::Graph.new
       @sources = Hash.new
+      @update = options.has_key?(:update) ? options[:update] : false
 
       # Dependencies need to be added AFTER the sources. If they are
       # not, then one of the dependencies of a source that is added
@@ -46,7 +47,11 @@ module Berkshelf
       end
 
       @sources[source.name] = source
-      use_source(source) || install_source(source)
+      if @update
+        install_source(source)
+      else
+        use_source(source) || install_source(source)
+      end
 
       graph.artifacts(source.name, source.cached_cookbook.version)
 

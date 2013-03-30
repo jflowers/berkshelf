@@ -385,7 +385,7 @@ module Berkshelf
     def update(options = {})
       resolver = Resolver.new(
         self.downloader,
-        sources: sources(options)
+        {sources: sources(options), update: true}
       )
 
       cookbooks         = resolver.resolve
